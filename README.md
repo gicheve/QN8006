@@ -1,5 +1,5 @@
 # QN8006
-QN8006 FM module simple library
+QN8006 FM module simple library for ARDUINO
 
 As I have received a QN8006 FM module instead of TEA5767 I have developed a simple library in order to use it.
 It is far away from perfect but it works at least for my needs.
