@@ -1,6 +1,4 @@
-/*
-QN8006 I2C FM Radio Library
-*/
+// QN8006 I2C FM Radio Library
 
 #include <Wire.h>
 
