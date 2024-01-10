@@ -29,12 +29,12 @@ class QN8006Radio
 private:
     int _address;
     int rssi;
-    
-    void transmitData(byte data);
+
+    void transmitData(byte data[]);
 
 public:
     QN8006Radio();
-    
+
     //receiver settings
     void initReceive(byte s_t, byte mode);
     void mute();
