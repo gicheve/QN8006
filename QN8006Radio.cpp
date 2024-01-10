@@ -4,7 +4,7 @@
 #include <QN8006Radio.h>
 
 QN8006Radio::QN8006Radio() {
-    _address = 0x2B;  //The default IC address is `0101011`
+    _address = 0x2B; //The default IC address is `0101011`
 }
 
 
