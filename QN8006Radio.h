@@ -12,7 +12,7 @@ private:
     int _address;
     int rssi;
 
-    void transmitData(byte data[]);
+    void sendData(byte data[]);
 
 public:
     QN8006Radio();
