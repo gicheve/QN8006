@@ -1,8 +1,9 @@
-/* QN8006 Transmitter Example
+/*
+QN8006 Transmitter Example
 
-- QN8006 module:
 
-Top view:
+- QN8006 module top view:
+
 +-10--9--8--7--6-+
 |  +------+  ++  |
 |  | QN   |  ||  |
@@ -20,8 +21,8 @@ Top view:
 8 ----> Audio out (left channel)
 9 ----> Antenna TX
 10 ---> Antenna RX
-
 */
+
 #include <Wire.h>
 #include <QN8006Radio.h>
 
