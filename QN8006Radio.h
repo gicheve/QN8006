@@ -27,19 +27,30 @@ Evgeniy Gichev 2021
 class QN8006Radio
 {
 private:
-	int _address;
-  int rssi;
+    int _address;
+    int rssi;
+    
+    void transmitData(byte data);
 
 public:
-  QN8006Radio();
-  void setFrequency(float frequency);
-  void initReceive(byte s_t, byte mode);
-  void mute();
-  void unmute();
-  void searchUp(unsigned char *stat);
-  int getStat(unsigned char *stat);
-  
-};
+    QN8006Radio();
+    
+    //receiver settings
+    void initReceive(byte s_t, byte mode);
+    void mute();
+    void unmute();
+    void searchUp(unsigned char *stat);
 
+    // transmitter settings
+    void initTransmit(byte mode);
+    void setOutputPower(byte output_power);
+    void setTxFrequencyDeviation(byte tx_fedv);
+
+    // common settings
+    void resetDevice();
+    void setFrequency(float frequency);
+    void setCrystalCapLoad(byte cap_load);
+    int getStat(unsigned char *stat);
+};
 
 #endif

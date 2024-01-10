@@ -33,6 +33,16 @@ QN8006Radio::QN8006Radio()
   _address = 0x2B;
 }
 
+void QN8006Radio::resetDevice() {
+  byte buf[2]; // 2-byte data value.
+  buf[0] = 0x01; //start subaddress SYSTEM2 Address: 01h
+  buf[1] = 0b10001001; // Reset all registers to default values:
+  
+  Wire.beginTransmission(_address);
+  Wire.write(buf,2); //send data
+  Wire.endTransmission();
+}
+
 void QN8006Radio::initReceive(byte s_t, byte mode)
 {
   byte buf[4]; // 5-byte data value.
@@ -53,6 +63,30 @@ void QN8006Radio::initReceive(byte s_t, byte mode)
   Wire.beginTransmission(_address);
   Wire.write(buf,2); //send data
 	Wire.endTransmission();
+}
+
+void QN8006Radio::initTransmit(byte mode)
+{  
+  byte buf[3]; // 3-byte data value.
+  buf[0] = 0x00; //start subaddress SYSTEM1 Address: 00h
+  buf[1] = 0b01000001; // Enter Transmitting mode. CH is determined by the content in CH[9:0].
+  
+  if (mode) buf[2] = 0b00001011; // Set STEREO & set IDLE to infinity (never go to Standby)
+  else buf[2] = 0b00011011; // Set MONO & set IDLE to infinity (never go to Standby)
+  
+  Wire.beginTransmission(_address);
+  Wire.write(buf,3); //send data
+  Wire.endTransmission();
+}
+
+void QN8006Radio::setOutputPower(byte output_power) 
+{
+  byte buf[2];
+  buf[0] = 0x0c; //start subaddress  Output power calibration control
+  buf[1] = output_power;
+  Wire.beginTransmission(_address);
+  Wire.write(buf,2); //send data
+  Wire.endTransmission();
 }
 
 int QN8006Radio::getStat(unsigned char *stat){
@@ -163,4 +197,32 @@ void QN8006Radio::setFrequency(float frequency)
   Wire.write(buf,2); //send data
 	Wire.endTransmission();
   
+}
+
+void QN8006Radio::setCrystalCapLoad(byte cap_load)
+{
+  
+  if (cap_load > 0b00111111) {
+	 cap_load = 0b00111111; 
+  }
+    
+  byte buf[2];
+  buf[0] = 0x04; //start subaddress  REG_VGA
+  buf[1] = cap_load + 0b01000000;
+  
+  Wire.beginTransmission(_address);
+  Wire.write(buf,2); //send data
+  Wire.endTransmission();
+}
+
+// Specify total TX frequency deviation: TX frequency deviation = 0.69 kHz*TX_FEDV. Default 108.
+void QN8006Radio::setTxFrequencyDeviation(byte tx_fedv)
+{
+  byte buf[2];
+  buf[0] = 0x0e; //start subaddress  TX_FDEV
+  buf[1] = tx_fedv;
+  
+  Wire.beginTransmission(_address);
+  Wire.write(buf,2); //send data
+  Wire.endTransmission();
 }
