@@ -1,9 +1,9 @@
-/*
-QN8006 Transmitter Example
+/* QN8006 Example
 
 
-- QN8006 module top view:
+- QN8006 module:
 
+Top view:
 +-10--9--8--7--6-+
 |  +------+  ++  |
 |  | QN   |  ||  |
@@ -19,33 +19,31 @@ QN8006 Transmitter Example
 6 ----> GND
 7 ----> Audio out (right channel)
 8 ----> Audio out (left channel)
-9 ----> Antenna TX
-10 ---> Antenna RX
-*/
+9 ----> Antenna Tx
+10 ---> Antenna Rx
 
+*/
 #include <Wire.h>
 #include <QN8006Radio.h>
 
 QN8006Radio radio = QN8006Radio();
 
-byte output_power = 100; // range 0 ... 255
-byte st_mo_tx = 0;       // tx stereo (1) or mono (0) mode selection
-float frequency = 76.0;  // range 76.0 ... 108.0 MHz
-byte cap_load = 25;      // range 0 ... 63, default 31, need for correct xtal frequency
+byte output_power = 115; // range 0 ... 255
+byte st_mo_tx = 0;      // TX stereo (1) or mono (0) mode selection
+float frequency = 76.0; // range 76.0 ... 108.0
+byte cap_load = 25;     // range 0 ... 63, default 31, need for correct xtal frequency
 byte tx_fedv = 110;      // range 0 ... 255, default 108
 
-void setup()
-{ 
-  Wire.begin();
-  radio.resetDevice(); //reset all registers to default value
-  radio.initTransmit(st_mo_tx);
-  radio.setOutputPower(output_power);
-  radio.setFrequency(frequency);
-  radio.setCrystalCapLoad(cap_load);
-  //radio.setTxFrequencyDeviation(tx_fedv);
+void setup() {
+    Wire.begin();
+    radio.resetDevice(); //reset all registers to default value
+    radio.initTransmit(st_mo_tx);
+    radio.setOutputPower(output_power);
+    radio.setFrequency(frequency);
+    radio.setCrystalCapLoad(cap_load);
+    //radio.setTxFrequencyDeviation(tx_fedv);
 }
 
-void loop()
-{
-  delay(86400);
+void loop() {
+    delay(86400);
 }
