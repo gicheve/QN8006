@@ -4,7 +4,7 @@
 #include <QN8006Radio.h>
 
 QN8006Radio::QN8006Radio() {
-    _address = 0x2B;
+    _address = 0x2B;  //The default IC address is `0101011`
 }
 
 
@@ -14,24 +14,19 @@ QN8006Radio::QN8006Radio() {
  * Initiate receive mode
  */
 void QN8006Radio::initReceive(byte s_t, byte mode) {
-    byte buf[4];
-    buf[0] = 0x00; // start subaddress SYSTEM1 Address: 00h
-    buf[1] = 0b10000001; // Enter Receiving mode. CH is determined by the content in CH[9:0].
+    byte buf_1[4];
+    buf_1[0] = 0x00; // Register `SYSTEM1` with address `00h`
+    buf_1[1] = 0b10000001; // Enter Receiving mode. CH is determined by the content in CH[9:0].
+    if (mode) buf_1[2] = 0b00001011; // Set STEREO & set IDLE to infinity (never go to Standby)
+    else buf_1[2] = 0b00011011; // Set MONO & set IDLE to infinity (never go to Standby)
+    if (s_t > 31)   buf_1[3] = 0b10101010;  //b7 = 1: RX CCA threshold MSB. See CCA register 19h [4:0].
+    else buf_1[3] = 0b00101010;  // b7 = 0: RX CCA threshold MSB. See CCA register 19h [4:0].
+    sendData(buf_1);
 
-    if (mode) buf[2] = 0b00001011; // Set STEREO & set IDLE to infinity (never go to Standby)
-    else buf[2] = 0b00011011; // Set MONO & set IDLE to infinity (never go to Standby)
-    if (s_t > 31)   buf[3] = 0b10101010;  //b7 = 1: RX CCA threshold MSB. See CCA register 19h [4:0].
-    else buf[3] = 0b00101010;  // b7 = 0: RX CCA threshold MSB. See CCA register 19h [4:0].
-
-    Wire.beginTransmission(_address);
-    Wire.write(buf,4); // send data
-    Wire.endTransmission();
-
-    buf[0] = 0x19; // start subaddress  CCA threshold
-    buf[1] = (s_t & 0b00011111) | 0b01000000;
-    Wire.beginTransmission(_address);
-    Wire.write(buf,2); // send data
-    Wire.endTransmission();
+    byte buf_2[2];
+    buf_2[0] = 0x19; // Register `CCA` with address `19h` // start subaddress  CCA threshold
+    buf_2[1] = (s_t & 0b00011111) | 0b01000000;
+    sendData(buf_2);
 }
 
 /*
